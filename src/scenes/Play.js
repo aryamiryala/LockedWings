@@ -31,10 +31,12 @@ class Play extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 640, 480, 'window').setOrigin(0,0);
         this.cage = this.add.tileSprite(40, 0, 540, 462, 'cage1').setOrigin(0,0);
         this.player = this.add.sprite(320, 240, 'firebird').setScale(0.35);
-        this.paw = new Paw(this, 0, 0, 'paw').setScale(0.3);
-
-        //paws = this.physics.add.
+        
+        
+        this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
         fireball = this.physics.add.sprite(700, 700, 'fireball');
+
+        this.moveRight = true;
 
        
         worldBounds = this.physics.world.bounds
@@ -81,12 +83,26 @@ class Play extends Phaser.Scene {
         if(this.gameOver == true && Phaser.Input.Keyboard.JustDown(keyLEFT)){
             this.scene.start("menuScene");
         }
-        this.paw.update(); 
-        
 
         if(this.gameOver == false){
-           
-           
+
+            if (this.paw.x <= 0){
+                this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
+            }
+    
+            if (this.paw.x >= 0 && this.moveRight == true){
+                this.paw.x += 5;
+                if (this.paw.x == 500){
+                    this.moveRight = false;
+                }
+            }
+            else if (this.paw.x <= 500 && this.moveRight == false){
+                this.paw.x -= 5;
+                if (this.paw.x == 0){
+                    this.moveRight = true;
+                }
+            }
+
             if (control == false && mouse.isDown){
                 // create fireball when firing
                 fireball = this.physics.add.sprite(this.player.x - 70, this.player.y - 7, 'fireball');
@@ -114,7 +130,7 @@ class Play extends Phaser.Scene {
                 this.player.y += 5;
             }
 
-            //this.physics.add.overlap(fireball, this.paw, this.reset(), null, this)
+            this.physics.add.overlap(fireball, this.paw, reset, null, this)
 
             /*if (this.checkCollision(fireball, this.paw)){
                 this.pawHealth -= 5;
@@ -149,6 +165,13 @@ class Play extends Phaser.Scene {
     //     this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
         
     // }
+}
+
+function reset(fireball, paw) {
+    fireball.destroy();
+    paw.destroy();
+    this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
+    control = false;
 }
 
 
