@@ -4,10 +4,12 @@ class Menu extends Phaser.Scene{
     }
     preload(){
         this.load.image('background', './assets/background.png');
+        this.load.audio('1Boss_Music', './assets/music.mp3');
     }
     
     create(){
         this.background= this.add.tileSprite(0, 0, 640, 480, 'background').setOrigin(0,0);
+        //this.
 
    
 
@@ -33,7 +35,7 @@ class Menu extends Phaser.Scene{
         //define keys
     
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-
+        keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
 
 
 
@@ -44,7 +46,12 @@ class Menu extends Phaser.Scene{
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
            
             // this.sound.play('sfx_select');
-              this.scene.start("playScene");    
+              this.scene.start("playtransitionScene");    
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyI)) {
+           
+            // this.sound.play('sfx_select');
+              this.scene.start("instructionScene");    
         }
         
 
