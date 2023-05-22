@@ -61,6 +61,7 @@ class Play extends Phaser.Scene {
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
        
         mouse = this.input.mousePointer;
         input = this.input;
@@ -81,9 +82,10 @@ class Play extends Phaser.Scene {
         }
         
         if(this.gameOver == true && Phaser.Input.Keyboard.JustDown(keyR)){
-            this.scene.restart(); 
+            this.scene.restart();
         }
-        if(this.gameOver == true && Phaser.Input.Keyboard.JustDown(keyLEFT)){
+
+        if(this.gameOver == true && Phaser.Input.Keyboard.JustDown(keyM)){
             this.scene.start("menuScene");
         }
 
@@ -134,8 +136,29 @@ class Play extends Phaser.Scene {
             }
 
             this.physics.add.overlap(fireball, this.paw, reset, null, this);
+
+            if (this.checkCollision(this.player, this.paw)){
+                console.log(this.player.x);
+                console.log(this.paw.x);
+                console.log(this.paw.x + (this.paw.width * 0.3));
+                console.log(this.player.y);
+                console.log(this.paw.y);
+                console.log(this.paw.y + (this.paw.height * 0.3));
+
+                this.gameOver = true;
+                this.gameDone();
+            }
         }
     }
+
+    // checkCollision(player, paw){
+    //     // checking if runner and paw collides
+    //     if (player.x < paw.x + (paw.width * 0.3) && player.x > paw.x && player.y < paw.y + (paw.height * 0.3) && player.y > paw.y){
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     gameDone(){
         let scoreConfig = {
@@ -148,7 +171,7 @@ class Play extends Phaser.Scene {
         };
         
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) to Menu', scoreConfig).setOrigin(0.5);
         
     }
 }
