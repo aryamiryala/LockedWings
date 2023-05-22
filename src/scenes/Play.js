@@ -137,17 +137,17 @@ class Play extends Phaser.Scene {
 
             this.physics.add.overlap(fireball, this.paw, reset, null, this);
 
-            if (this.checkCollision(this.player, this.paw)){
-                console.log(this.player.x);
-                console.log(this.paw.x);
-                console.log(this.paw.x + (this.paw.width * 0.3));
-                console.log(this.player.y);
-                console.log(this.paw.y);
-                console.log(this.paw.y + (this.paw.height * 0.3));
+            // if (this.checkCollision(this.player, this.paw)){
+            //     console.log(this.player.x);
+            //     console.log(this.paw.x);
+            //     console.log(this.paw.x + (this.paw.width * 0.3));
+            //     console.log(this.player.y);
+            //     console.log(this.paw.y);
+            //     console.log(this.paw.y + (this.paw.height * 0.3));
 
-                this.gameOver = true;
-                this.gameDone();
-            }
+            //     this.gameOver = true;
+            //     this.gameDone();
+            // }
         }
     }
 
