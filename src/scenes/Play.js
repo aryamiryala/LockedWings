@@ -25,12 +25,11 @@ class Play extends Phaser.Scene {
 
         this.gameOver = false; 
 
-     
-
+        this.pawHealth = 100;
 
         this.background = this.add.tileSprite(0, 0, 640, 480, 'window').setOrigin(0,0);
         this.cage = this.add.tileSprite(40, 0, 540, 462, 'cage1').setOrigin(0,0);
-        this.player = this.add.sprite(320, 240, 'firebird').setScale(0.35);
+        this.player = this.physics.add.sprite(320, 240, 'firebird').setScale(0.35);
         
         
         this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
@@ -76,6 +75,10 @@ class Play extends Phaser.Scene {
   
     update(){
 
+        if (this.pawHealth <= 0){
+            this.gameOver = true;
+            this.gameDone();
+        }
         
         if(this.gameOver == true && Phaser.Input.Keyboard.JustDown(keyR)){
             this.scene.restart(); 
@@ -130,47 +133,31 @@ class Play extends Phaser.Scene {
                 this.player.y += 5;
             }
 
-            this.physics.add.overlap(fireball, this.paw, reset, null, this)
-
-            /*if (this.checkCollision(fireball, this.paw)){
-                this.pawHealth -= 5;
-                console.log(this.pawHealth);
-                this.paw.reset();
-                fireball.destroy();
-                control = false;
-            }*/
+            this.physics.add.overlap(fireball, this.paw, reset, null, this);
         }
     }
 
-    /*checkCollision(fireball, paw){
-        // checking if runner and paw collides
-        if (fireball.x < paw.x + paw.width && fireball.x + 10 > paw.x && fireball.y < paw.y + paw.height && 40 + fireball.y > paw.y){
-            return true;
-        } else {
-            return false;
-        }
-    }*/
-
-    // gameDone(){
-    //     let scoreConfig = {
-    //         fontSize: '30px',
-    //         fill: '#ffffff',
-    //         fontFamily: '"Georgia"',
-    //         strokeThickness: 5,
-    //         stroke: 'black',
+    gameDone(){
+        let scoreConfig = {
+            fontSize: '30px',
+            fill: '#ffffff',
+            fontFamily: '"Georgia"',
+            strokeThickness: 5,
+            stroke: 'black',
     
-    //       };
+        };
         
-    //     this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-    //     this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
         
-    // }
+    }
 }
 
 function reset(fireball, paw) {
     fireball.destroy();
     paw.destroy();
     this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
+    this.pawHealth -= 5;
     control = false;
 }
 
