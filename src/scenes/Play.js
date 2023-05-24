@@ -30,7 +30,7 @@ class Play extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 640, 480, 'window').setOrigin(0,0);
         this.cage = this.add.tileSprite(40, 0, 540, 462, 'cage1').setOrigin(0,0);
         this.player = this.physics.add.sprite(320, 240, 'firebird').setScale(0.35);
-        this.player.body.setSize(100, 100, true); // fix this 
+        this.player.body.setSize(200, 200, true); // fix this 
         
         
         this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
