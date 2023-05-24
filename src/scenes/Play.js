@@ -30,6 +30,7 @@ class Play extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 640, 480, 'window').setOrigin(0,0);
         this.cage = this.add.tileSprite(40, 0, 540, 462, 'cage1').setOrigin(0,0);
         this.player = this.physics.add.sprite(320, 240, 'firebird').setScale(0.35);
+        this.player.body.setSize(100, 100, true); // fix this 
         
         
         this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
@@ -39,6 +40,9 @@ class Play extends Phaser.Scene {
 
        
         worldBounds = this.physics.world.bounds
+
+        // Tracking for player and paw collision
+        this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
 
         // Background Music;
         this.BGMusic = this.sound.add('1Boss_Music');
@@ -65,9 +69,6 @@ class Play extends Phaser.Scene {
        
         mouse = this.input.mousePointer;
         input = this.input;
-
-        
-        
        
         
     }
@@ -76,8 +77,7 @@ class Play extends Phaser.Scene {
   
     update(){
 
-        if (this.pawHealth <= 0){
-            this.gameOver = true;
+        if (this.pawHealth <= 0 || this.gameOver == true){
             this.gameDone();
         }
         
@@ -135,7 +135,8 @@ class Play extends Phaser.Scene {
                 this.player.y += 5;
             }
 
-            this.physics.add.overlap(fireball, this.paw, reset, null, this);
+            this.physics.add.overlap(fireball, this.paw, reset, null, this); //look up phaser3 hit test
+            this.physics.add.overlap(this.player, this.paw, )
 
             // if (this.checkCollision(this.player, this.paw)){
             //     console.log(this.player.x);
@@ -152,7 +153,7 @@ class Play extends Phaser.Scene {
     }
 
     // checkCollision(player, paw){
-    //     // checking if runner and paw collides
+    //     //checking if runner and paw collides
     //     if (player.x < paw.x + (paw.width * 0.3) && player.x > paw.x && player.y < paw.y + (paw.height * 0.3) && player.y > paw.y){
     //         return true;
     //     } else {
@@ -183,6 +184,10 @@ function reset(fireball, paw) {
     this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
     this.pawHealth -= 5;
     control = false;
+}
+
+function gameLost() {
+    this.gameOver = true;
 }
 
 
