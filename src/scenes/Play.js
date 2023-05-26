@@ -38,8 +38,18 @@ class Play extends Phaser.Scene {
 
         this.moveRight = true;
 
-       
-        worldBounds = this.physics.world.bounds
+        worldBounds = this.physics.world.bounds;
+
+        let scoreConfig = {
+            fontSize: '30px',
+            fill: '#ffffff',
+            fontFamily: '"Georgia"',
+            strokeThickness: 5,
+            stroke: 'black',
+    
+        };
+
+        this.catHP = this.add.text(0 , 0, 'Cat Health: ' + this.pawHealth, scoreConfig);
 
         // Background Music;
         this.BGMusic = this.sound.add('1Boss_Music');
@@ -136,11 +146,12 @@ class Play extends Phaser.Scene {
             this.physics.add.overlap(fireball, this.paw, reset, null, this);
             // Tracking for player and paw collision
             this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
+            this.catHP.setText("Cat Health: " + this.pawHealth);
         }
     }
 
     gameDone(){
-        let scoreConfig = {
+        let textConfig = {
             fontSize: '30px',
             fill: '#ffffff',
             fontFamily: '"Georgia"',
@@ -150,8 +161,8 @@ class Play extends Phaser.Scene {
         };
         this.BGMusic.stop(); 
         this.gameOver = true;
-        this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) to Menu', scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', textConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) to Menu', textConfig).setOrigin(0.5);
         
     }
 }
