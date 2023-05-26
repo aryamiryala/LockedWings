@@ -30,7 +30,7 @@ class Play extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 640, 480, 'window').setOrigin(0,0);
         this.cage = this.add.tileSprite(40, 0, 540, 462, 'cage1').setOrigin(0,0);
         this.player = this.physics.add.sprite(320, 240, 'firebird').setScale(0.35);
-        this.player.body.setSize(200, 200, true); // fix this 
+        this.player.body.setSize(200, 150, true); // fix this 
         
         
         this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
@@ -40,9 +40,6 @@ class Play extends Phaser.Scene {
 
        
         worldBounds = this.physics.world.bounds
-
-        // Tracking for player and paw collision
-        this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
 
         // Background Music;
         this.BGMusic = this.sound.add('1Boss_Music');
@@ -93,6 +90,7 @@ class Play extends Phaser.Scene {
 
             if (this.paw.x <= 0){
                 this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
+                this.paw.x += 5;
             }
     
             if (this.paw.x >= 0 && this.moveRight == true){
@@ -135,31 +133,11 @@ class Play extends Phaser.Scene {
                 this.player.y += 5;
             }
 
-            this.physics.add.overlap(fireball, this.paw, reset, null, this); //look up phaser3 hit test
-            this.physics.add.overlap(this.player, this.paw, )
-
-            // if (this.checkCollision(this.player, this.paw)){
-            //     console.log(this.player.x);
-            //     console.log(this.paw.x);
-            //     console.log(this.paw.x + (this.paw.width * 0.3));
-            //     console.log(this.player.y);
-            //     console.log(this.paw.y);
-            //     console.log(this.paw.y + (this.paw.height * 0.3));
-
-            //     this.gameOver = true;
-            //     this.gameDone();
-            // }
+            this.physics.add.overlap(fireball, this.paw, reset, null, this);
+            // Tracking for player and paw collision
+            this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
         }
     }
-
-    // checkCollision(player, paw){
-    //     //checking if runner and paw collides
-    //     if (player.x < paw.x + (paw.width * 0.3) && player.x > paw.x && player.y < paw.y + (paw.height * 0.3) && player.y > paw.y){
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
     gameDone(){
         let scoreConfig = {
@@ -171,7 +149,7 @@ class Play extends Phaser.Scene {
     
         };
         this.BGMusic.stop(); 
-        
+        this.gameOver = true;
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) to Menu', scoreConfig).setOrigin(0.5);
         
