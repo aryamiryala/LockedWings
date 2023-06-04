@@ -4,14 +4,14 @@ class PlayTransition extends Phaser.Scene {
     }
     preload(){
         this.load.image('room', './assets/house.jpeg');
-        this.load.image('cage', './assets/cage.png');
+        this.load.image('cage', './assets/new_cage.png');
         this.load.spritesheet('firebird', './assets/bird.png', {frameWidth: 600, frameHeight: 400})
 
     }
 
     create(){
         this.background = this.add.tileSprite(0, 0, 640, 480, 'room').setOrigin(0,0);
-        this.cage = this.add.tileSprite(200, 30, 300, 200, 'cage').setOrigin(0,0).setScale(1.2);
+        this.cage = this.add.tileSprite(245, 45, 500, 500, 'cage').setOrigin(0,0).setScale(0.3);
         this.player = this.add.sprite(330, 150, 'firebird').setScale(0.2);
 
         // Animation config

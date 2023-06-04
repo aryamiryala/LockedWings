@@ -14,7 +14,7 @@ class Play extends Phaser.Scene {
     }
     preload(){
         this.load.image('window', './assets/window.png');
-        this.load.image('cage1', './assets/cage_resized.png');
+        this.load.image('cage1', './assets/cage_resized2.png');
         this.load.image('fireball', './assets/fireball.png');
         this.load.spritesheet('firebird', './assets/bird.png', {frameWidth: 125, frameHeight: 400, startFrame: 0, endFrame: 4})
         this.load.image('paw','./assets/paw.png');
@@ -28,7 +28,7 @@ class Play extends Phaser.Scene {
         this.pawHealth = 100;
 
         this.background = this.add.tileSprite(0, 0, 640, 480, 'window').setOrigin(0,0);
-        this.cage = this.add.tileSprite(40, 0, 540, 462, 'cage1').setOrigin(0,0);
+        this.cage = this.add.tileSprite(-80, -40, 800, 550, 'cage1').setOrigin(0,0);
         this.player = this.physics.add.sprite(320, 240, 'firebird').setScale(0.35);
         this.player.body.setSize(200, 150, true); // fix this 
         
@@ -85,6 +85,7 @@ class Play extends Phaser.Scene {
     update(){
 
         if (this.pawHealth <= 0 || this.gameOver == true){
+            this.catHP.setText("Cat Health: " + this.pawHealth);
             this.gameDone();
         }
         
@@ -170,7 +171,9 @@ class Play extends Phaser.Scene {
 function reset(fireball, paw) {
     fireball.destroy();
     paw.destroy();
-    this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
+    this.paw = this.time.addEvent({delay: 5000, callback: () => {
+        this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
+    }, scope: this, loop: false});
     this.pawHealth -= 5;
     control = false;
 }
