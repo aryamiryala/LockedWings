@@ -33,7 +33,7 @@ class Play extends Phaser.Scene {
         this.player.body.setSize(200, 150, true); // fix this 
         
         
-        this.paw = this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
+        this.paw = this.physics.add.sprite(-200, 170, 'paw').setScale(0.3);
         fireball = this.physics.add.sprite(700, 700, 'fireball');
 
         this.moveRight = true;
@@ -99,23 +99,23 @@ class Play extends Phaser.Scene {
 
         if(this.gameOver == false){
 
-            if (this.paw.x <= 0){
+            if (this.paw.x <= -195 || this.paw.x >= 900){
+                console.log(this.paw.x);
                 this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
-                this.paw.x += 5;
+                if (this.paw.x >= 900){
+                    this.paw.x = -200;
+                }
             }
     
-            if (this.paw.x >= 0 && this.moveRight == true){
-                this.paw.x += 5;
-                if (this.paw.x == 500){
-                    this.moveRight = false;
-                }
+            if (this.moveRight == true && this.paw.x < 900){
+                this.paw.x += 10;
             }
-            else if (this.paw.x <= 500 && this.moveRight == false){
-                this.paw.x -= 5;
-                if (this.paw.x == 0){
-                    this.moveRight = true;
-                }
-            }
+            // else if (this.paw.x <= 500 && this.moveRight == false){
+            //     this.paw.x -= 5;
+            //     if (this.paw.x == 0){
+            //         this.moveRight = true;
+            //     }
+            // }
 
             if (control == false && mouse.isDown){
                 // create fireball when firing
@@ -171,10 +171,12 @@ class Play extends Phaser.Scene {
 function reset(fireball, paw) {
     fireball.destroy();
     paw.destroy();
-    this.paw = this.time.addEvent({delay: 5000, callback: () => {
-        this.physics.add.sprite(0, 170, 'paw').setScale(0.3);
+    this.DelayPaw = this.time.addEvent({delay: 2000, callback: () => {
+        this.paw = this.physics.add.sprite(-200, 170, 'paw').setScale(0.3);
+        this.moveRight = true;
     }, scope: this, loop: false});
     this.pawHealth -= 5;
+    this.paw.x -= 80;
     control = false;
 }
 
