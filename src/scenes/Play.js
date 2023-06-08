@@ -1,4 +1,3 @@
-
 var control = false;
 
 var mouse;
@@ -18,6 +17,7 @@ class Play extends Phaser.Scene {
         this.load.image('fireball', './assets/fireball.png');
         this.load.spritesheet('firebird', './assets/bird.png', {frameWidth: 125, frameHeight: 400, startFrame: 0, endFrame: 4})
         this.load.image('paw','./assets/paw.png');
+        this.load.image('danger','./assets/exclaimation.png');
 
     }
 
@@ -33,7 +33,8 @@ class Play extends Phaser.Scene {
         this.player.body.setSize(200, 150, true); // fix this 
         
         
-        this.paw = this.physics.add.sprite(-200, 170, 'paw').setScale(0.3);
+        this.paw = this.physics.add.sprite(-400, 170, 'paw').setScale(0.3);
+        this.danger = this.add.sprite(30, this.paw.y, 'danger').setScale(0.2);
         fireball = this.physics.add.sprite(700, 700, 'fireball');
 
         this.moveRight = true;
@@ -99,16 +100,19 @@ class Play extends Phaser.Scene {
 
         if(this.gameOver == false){
 
-            if (this.paw.x <= -195 || this.paw.x >= 900){
-                console.log(this.paw.x);
+            if (this.paw.x <= -395 || this.paw.x >= 900){
                 this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
+                this.danger.y = this.paw.y;
                 if (this.paw.x >= 900){
-                    this.paw.x = -200;
+                    this.paw.x = -400;
                 }
             }
     
             if (this.moveRight == true && this.paw.x < 900){
                 this.paw.x += 10;
+                if (this.paw.x == 0){
+                    this.danger.destroy();
+                }
             }
             // else if (this.paw.x <= 500 && this.moveRight == false){
             //     this.paw.x -= 5;
@@ -128,14 +132,17 @@ class Play extends Phaser.Scene {
             
     
             if (fireball.x > worldBounds.width || fireball.y > worldBounds.height || fireball.x < 0 || fireball.y < 0){
+                fireball.destroy();
                 control = false;
             }
     
             if(keyLEFT.isDown && 150 < this.player.x) { // change width based on bird cage
                 this.player.x -= 5;
+                this.player.flipX = false;
             }
             if (keyRIGHT.isDown && this.player.x < 500) { // change width based on bird cage
                 this.player.x += 5;
+                this.player.flipX = true; 
             }
             if (keyUP.isDown && 170 < this.player.y) { // change width based on bird cage
                 this.player.y -= 5;
@@ -172,7 +179,8 @@ function reset(fireball, paw) {
     fireball.destroy();
     paw.destroy();
     this.DelayPaw = this.time.addEvent({delay: 2000, callback: () => {
-        this.paw = this.physics.add.sprite(-200, 170, 'paw').setScale(0.3);
+        this.paw = this.physics.add.sprite(-400, 170, 'paw').setScale(0.3);
+        this.danger = this.add.sprite(30, this.paw.y, 'danger').setScale(0.2);
         this.moveRight = true;
     }, scope: this, loop: false});
     this.pawHealth -= 5;
