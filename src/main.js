@@ -6,12 +6,12 @@ let config = {
         default: 'arcade',
         arcade: {
           gravity: { y: 0 },
-          debug: true
+          debug: false
           
         }
 
     },
-    scene: [Menu, PlayTransition, Instruction, Play],
+    scene: [Menu, PlayTransition, Instruction, Play, Credit],
     fps: {
       forceSetTimeOut: true,
       target: 60
@@ -22,7 +22,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 //reserve keyboard vars
-let keyUP, keyDOWN, keyLEFT, keyRIGHT, keyI, keyR, keyM, keyW, keyA, keyS, keyD; 
+let keyUP, keyDOWN, keyLEFT, keyRIGHT, keyI, keyR, keyM, keyW, keyA, keyS, keyD, keyC; 
 
 //set UI sizes
 let borderUISize = game.config.height / 15; 

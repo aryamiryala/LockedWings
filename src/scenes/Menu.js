@@ -27,15 +27,19 @@ class Menu extends Phaser.Scene{
         };
         this.add.text(game.config.width/2, game.config.height/7 - borderUISize - borderPadding, 'Locked Wings', menuConfig).setOrigin(0.5);
 
-        this.add.text(game.config.width/2, game.config.height/1.9, 'Press I for instructions', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/5.9, 'Press I for instructions', menuConfig).setOrigin(0.5);
     
-        this.add.text(game.config.width/2, game.config.height/1.2, 'Press -> to start game', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 'Press -> to start game', menuConfig).setOrigin(0.5);
+
+        this.add.text(game.config.width/2, game.config.height/1.2, 'Press C for credits', menuConfig).setOrigin(0.5);
       
 
         //define keys
     
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+        keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+
 
 
 
@@ -52,6 +56,11 @@ class Menu extends Phaser.Scene{
            
             // this.sound.play('sfx_select');
               this.scene.start("instructionScene");    
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyC)) {
+           
+            // this.sound.play('sfx_select');
+              this.scene.start("creditScene");    
         }
         
 
