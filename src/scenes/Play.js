@@ -83,7 +83,6 @@ class Play extends Phaser.Scene {
         
     }
 
-
   
     update(){
 
@@ -117,12 +116,17 @@ class Play extends Phaser.Scene {
                 this.spawnPaw();
             }
     
-            // if paw hasnt reached end, keep it moving
+            // Paw movement
             if (this.pawMoving && !this.pawReachedEnd()){
                 // if moving left or right
                 if (this.pawDirection == Dir.Left || this.pawDirection == Dir.Right) {
                     this.paw.x += 10 * this.pawDirection[0];
                 }
+
+                else if (this.pawDirection == Dir.Up || this.pawDirection == Dir.Down) {
+                    this.paw.y += 10 * this.pawDirection[1];
+                }
+
                 if (this.paw.x == 0){
                     this.danger.destroy();
                 }
@@ -166,7 +170,7 @@ class Play extends Phaser.Scene {
 
             this.physics.add.overlap(fireball, this.paw, reset, null, this);
             // Tracking for player and paw collision
-            this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
+            //this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
             this.catHP.setText("Cat Health: " + this.pawHealth);
         }
     }
@@ -189,7 +193,7 @@ class Play extends Phaser.Scene {
 
     spawnPaw() {
         // Pick and set random direction
-        var rand = Math.floor(Math.random() * (Object.keys(Dir).length - 2)); // just left right for now
+        var rand = Math.floor(Math.random() * (Object.keys(Dir).length));
         this.pawDirection = Dir[Object.keys(Dir)[rand]];
 
         // Set sprite rotation and hitbox
@@ -202,22 +206,45 @@ class Play extends Phaser.Scene {
                 this.paw.setAngle(180);
                 this.paw.body.setSize(980, 425);
                 break;
+            case Dir.Up:
+                this.paw.setAngle(270);
+                this.paw.body.setSize(425, 980);
+                break;
+            case Dir.Down:
+                this.paw.setAngle(90);
+                this.paw.body.setSize(425, 980);
+                break;
         }
 
-        // Spawn paw with x depending on direction and random y within range
+        // Left/right: Spawn paw with x depending on direction and random y within range
         if (this.pawDirection == Dir.Left || this.pawDirection == Dir.Right) {
             this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
             this.danger.y = this.paw.y;
             this.paw.x = 320 - (720 * this.pawDirection[0]);
         }
+        
+        // Up/down: Spawn paw with y depending on direction and random x within range
+        else if (this.pawDirection == Dir.Up || this.pawDirection == Dir.Down) {
+            this.paw.x = Math.floor(Phaser.Math.Between(170, 400));
+            this.paw.y = 240 - (720 * this.pawDirection[1]);
+        }
     }
 
+    // returns true or false depending on if paw has passed edge (when it should reset position)
     pawReachedEnd() {
         if (this.pawDirection == Dir.Right && this.paw.x >= 900) {
             return true;
         }
         
         else if (this.pawDirection == Dir.Left && this.paw.x <= -260) {
+            return true;
+        }
+
+        else if (this.pawDirection == Dir.Up && this.paw.y <= -260) {
+            return true;
+        }
+
+        else if (this.pawDirection == Dir.Down && this.paw.y >= 740) {
             return true;
         }
 
