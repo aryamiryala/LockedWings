@@ -22,7 +22,7 @@ class Instruction extends Phaser.Scene {
             fontFamily: 'Georgia', 
             fontSize: '16px', 
             backgroundColor: 'transparent',
-            color: '#0E89B4',
+            color: '#362923',
             align: 'center',
             padding: {
                 top: 5, 
@@ -34,9 +34,9 @@ class Instruction extends Phaser.Scene {
        
        
         Your goal in the game is to escape the cage by defeating the cat trying to kill you. 
-        If hit by the cat three times the game ends. 
+        If hit by the cat the game ends. 
 
-        Use the mouse or trackpad to shoot fire and the arrow keys to move. Good Luck!!
+        Use the mouse or trackpad to shoot fire and the W,A,S,D to move. Good Luck!!
         `;
         this.add.text(game.config.width/2, game.config.height/7 - borderUISize - borderPadding, 'Instructions', instructionConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, 250, mssg , mssgConfig).setOrigin(0.5);
