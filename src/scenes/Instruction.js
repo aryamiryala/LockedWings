@@ -22,7 +22,7 @@ class Instruction extends Phaser.Scene {
             fontFamily: 'Georgia', 
             fontSize: '16px', 
             backgroundColor: 'transparent',
-            color: '#362923',
+            color: 'blue',
             align: 'center',
             padding: {
                 top: 5, 
