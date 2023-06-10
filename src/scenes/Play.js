@@ -170,7 +170,7 @@ class Play extends Phaser.Scene {
 
             this.physics.add.overlap(fireball, this.paw, reset, null, this);
             // Tracking for player and paw collision
-            //this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
+            this.physics.add.overlap(this.player, this.paw, gameLost, null, this);
             this.catHP.setText("Cat Health: " + this.pawHealth);
         }
     }
