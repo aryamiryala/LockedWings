@@ -11,7 +11,11 @@ let config = {
         }
 
     },
-    scene: [Menu, PlayTransition, Instruction, Play]
+    scene: [Menu, PlayTransition, Instruction, Play],
+    fps: {
+      forceSetTimeOut: true,
+      target: 60
+  }
 }
 
 let game = new Phaser.Game(config);
@@ -21,4 +25,12 @@ let keyUP, keyDOWN, keyLEFT, keyRIGHT, keyI, keyR, keyM;
 
 //set UI sizes
 let borderUISize = game.config.height / 15; 
-let borderPadding = borderUISize / 3; 
+let borderPadding = borderUISize / 3;
+
+// define moving directions for paw (direction[0] is x, direction[1] is y)
+const Dir = {
+  Left: [-1, 0],
+  Right: [1, 0],
+  Up: [0, -1],
+  Down: [0, 1]
+}

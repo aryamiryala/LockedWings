@@ -26,6 +26,7 @@ class Play extends Phaser.Scene {
         this.gameOver = false; 
 
         this.pawHealth = 100;
+        this.pawDirection = Dir.Right;
 
         this.background = this.add.tileSprite(0, 0, 640, 480, 'window').setOrigin(0,0);
         this.cage = this.add.tileSprite(-80, -40, 800, 550, 'cage1').setOrigin(0,0);
@@ -37,7 +38,8 @@ class Play extends Phaser.Scene {
         this.danger = this.add.sprite(30, this.paw.y, 'danger').setScale(0.2);
         fireball = this.physics.add.sprite(700, 700, 'fireball');
 
-        this.moveRight = true;
+        //this.moveRight = true;
+        this.pawMoving = true;
 
         worldBounds = this.physics.world.bounds;
 
@@ -100,16 +102,27 @@ class Play extends Phaser.Scene {
 
         if(this.gameOver == false){
 
-            if (this.paw.x <= -395 || this.paw.x >= 900){
+            // Spawning paw within range and at x -400
+            /*if (this.paw.x <= -395 || this.paw.x >= 900){
                 this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
                 this.danger.y = this.paw.y;
                 if (this.paw.x >= 900){
                     this.paw.x = -400;
                 }
+            }*/
+
+            // Spawn paw with random direction
+            if (this.pawReachedEnd()) {
+
+                this.spawnPaw();
             }
     
-            if (this.moveRight == true && this.paw.x < 900){
-                this.paw.x += 10;
+            // if paw hasnt reached end, keep it moving
+            if (this.pawMoving && !this.pawReachedEnd()){
+                // if moving left or right
+                if (this.pawDirection == Dir.Left || this.pawDirection == Dir.Right) {
+                    this.paw.x += 10 * this.pawDirection[0];
+                }
                 if (this.paw.x == 0){
                     this.danger.destroy();
                 }
@@ -173,18 +186,58 @@ class Play extends Phaser.Scene {
         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) to Menu', textConfig).setOrigin(0.5);
         
     }
+
+    spawnPaw() {
+        // Pick and set random direction
+        var rand = Math.floor(Math.random() * (Object.keys(Dir).length - 2)); // just left right for now
+        this.pawDirection = Dir[Object.keys(Dir)[rand]];
+
+        // Set sprite rotation and hitbox
+        switch(this.pawDirection) {
+            case Dir.Right:
+                this.paw.setAngle(0);
+                this.paw.body.setSize(980, 425);
+                break;
+            case Dir.Left:
+                this.paw.setAngle(180);
+                this.paw.body.setSize(980, 425);
+                break;
+        }
+
+        // Spawn paw with x depending on direction and random y within range
+        if (this.pawDirection == Dir.Left || this.pawDirection == Dir.Right) {
+            this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
+            this.danger.y = this.paw.y;
+            this.paw.x = 320 - (720 * this.pawDirection[0]);
+        }
+    }
+
+    pawReachedEnd() {
+        if (this.pawDirection == Dir.Right && this.paw.x >= 900) {
+            return true;
+        }
+        
+        else if (this.pawDirection == Dir.Left && this.paw.x <= -260) {
+            return true;
+        }
+
+        else return false;
+    }
 }
 
 function reset(fireball, paw) {
     fireball.destroy();
-    paw.destroy();
+    // paw.destroy();
+    this.pawMoving = false;
+    this.spawnPaw();
     this.DelayPaw = this.time.addEvent({delay: 2000, callback: () => {
-        this.paw = this.physics.add.sprite(-400, 170, 'paw').setScale(0.3);
+        //this.paw = this.physics.add.sprite(-400, 170, 'paw').setScale(0.3);
         this.danger = this.add.sprite(30, this.paw.y, 'danger').setScale(0.2);
-        this.moveRight = true;
+        //this.moveRight = true;
+        this.pawMoving = true;
     }, scope: this, loop: false});
     this.pawHealth -= 5;
-    this.paw.x -= 80;
+    this.paw.x -= 80 * this.pawDirection[0];
     control = false;
 }
 

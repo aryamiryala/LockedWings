@@ -3,6 +3,16 @@ class Paw extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
         this.moveRight = true;
+
+        const Dir = {
+            Left: [-1, 0],
+            Right: [1, 0],
+            Up: [0, -1],
+            Down: [0, 1]
+        }
+
+        this.direction = Dir.Right;
+
     }
 
     update() {
