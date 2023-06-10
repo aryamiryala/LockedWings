@@ -15,6 +15,7 @@ let config = {
     fps: {
       forceSetTimeOut: true,
       target: 60
+      
   }
 }
 

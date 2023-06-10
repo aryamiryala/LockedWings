@@ -35,7 +35,7 @@ class Play extends Phaser.Scene {
         
         
         this.paw = this.physics.add.sprite(-400, 170, 'paw').setScale(0.3);
-        this.danger = this.add.sprite(30, this.paw.y, 'danger').setScale(0.2);
+        this.danger = this.add.sprite(40, this.paw.y, 'danger').setScale(0.2);
         fireball = this.physics.add.sprite(700, 700, 'fireball');
 
         //this.moveRight = true;
@@ -127,9 +127,13 @@ class Play extends Phaser.Scene {
                     this.paw.y += 10 * this.pawDirection[1];
                 }
 
-                if (this.paw.x == 0){
-                    this.danger.destroy();
+                if (Phaser.Math.Distance.Between(this.paw.x, this.paw.y, this.danger.x, this.danger.y) < 160) {
+                    this.danger.alpha = 0;
                 }
+
+                /*if (this.paw.x == 0){
+                    this.danger.destroy();
+                }*/
             }
             // else if (this.paw.x <= 500 && this.moveRight == false){
             //     this.paw.x -= 5;
@@ -216,17 +220,22 @@ class Play extends Phaser.Scene {
                 break;
         }
 
-        // Left/right: Spawn paw with x depending on direction and random y within range
+        // Left/right: Spawn paw with x depending on direction and random y within range, and move danger
         if (this.pawDirection == Dir.Left || this.pawDirection == Dir.Right) {
             this.paw.y = Math.floor(Phaser.Math.Between(170, 400));
-            this.danger.y = this.paw.y;
             this.paw.x = 320 - (720 * this.pawDirection[0]);
+            this.danger.y = this.paw.y;
+            this.danger.x = 320 - (275 * this.pawDirection[0]) - 5;
+            this.danger.alpha = 1;
         }
         
-        // Up/down: Spawn paw with y depending on direction and random x within range
+        // Up/down: Spawn paw with y depending on direction and random x within range, and move danger
         else if (this.pawDirection == Dir.Up || this.pawDirection == Dir.Down) {
             this.paw.x = Math.floor(Phaser.Math.Between(170, 400));
             this.paw.y = 240 - (720 * this.pawDirection[1]);
+            this.danger.x = this.paw.x;
+            this.danger.y = 240 - (200 * this.pawDirection[1]) + 5;
+            this.danger.alpha = 1;
         }
     }
 
@@ -257,11 +266,13 @@ function reset(fireball, paw) {
     // paw.destroy();
     this.pawMoving = false;
     this.spawnPaw();
+    this.danger.alpha = 0;
     this.DelayPaw = this.time.addEvent({delay: 2000, callback: () => {
         //this.paw = this.physics.add.sprite(-400, 170, 'paw').setScale(0.3);
-        this.danger = this.add.sprite(30, this.paw.y, 'danger').setScale(0.2);
+        //this.danger = this.add.sprite(30, this.paw.y, 'danger').setScale(0.2);
         //this.moveRight = true;
         this.pawMoving = true;
+        this.danger.alpha = 1;
     }, scope: this, loop: false});
     this.pawHealth -= 5;
     this.paw.x -= 80 * this.pawDirection[0];
